@@ -35,6 +35,7 @@ import UserFlair from "./UserFlair";
 import PostOptButton from "./PostOptButton";
 import { GoRepoForked } from "react-icons/go";
 import SubIcon from "./SubIcon";
+import CommentList from "./CommentList";
 
 const PostModal = ({
   setSelect,
@@ -63,6 +64,8 @@ const PostModal = ({
   const [windowWidth, windowHeight] = useWindowSize();
   const [error, setError] = useState(false);
   const commentsRef = useRef<HTMLDivElement>(null);
+  const scrollRef=useRef(null);
+  const commentContainerRef = useRef(null);
   const executeScroll = () => {
     commentsRef.current.scrollIntoView({
       behavior: "smooth",
@@ -600,6 +603,7 @@ const PostModal = ({
               </div>
               {/* Content container */}
               <div
+                ref={scrollRef}
                 className="flex flex-col w-full mt-24 overflow-y-auto border-t border-transparent rounded-lg md:mt-14 dark:border-darkBorder md:pt-0 scrollbar-thin scrollbar-thumb-lightScroll scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full dark:scrollbar-thumb-darkScroll"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -905,7 +909,7 @@ const PostModal = ({
                 {/* comments */}
                 <div
                   className={
-                    "flex-grow bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG"
+                    " bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG"
                   }
                 >
                   <div
@@ -947,7 +951,7 @@ const PostModal = ({
                       ))}{" "}
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center w-full mb-5 overflow-x-hidden">
+                    <div className="flex flex-col items-center justify-center min-w-full mb-5 overflow-x-hidden ">
                       <h1 className="">
                         {post_comments?.[0] ? "" : "no comments :("}
                       </h1>
@@ -963,14 +967,18 @@ const PostModal = ({
                           </div>
                         </div>
                       )}
-                      <div className={"flex-grow  w-full px-2 "}>
+                      <div className="min-w-full">
+                      <div className={" mx-2  "} ref={commentContainerRef}>
                         <Comments comments={myReplies} depth={0} />
-                        <Comments
+                        <CommentList
                           comments={post_comments}
+                          scrollRef={scrollRef}
+                          containerRef={commentContainerRef}
                           depth={0}
                           op={apost?.author}
                           portraitMode={usePortrait}
                         />
+                      </div>
                       </div>
                     </div>
                   )}
