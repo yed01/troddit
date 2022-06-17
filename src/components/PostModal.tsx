@@ -33,6 +33,7 @@ import UserFlair from "./UserFlair";
 import PostOptButton from "./PostOptButton";
 import { GoRepoForked } from "react-icons/go";
 import SubIcon from "./SubIcon";
+import CommentsVirtual from "./CommentsVirtual";
 
 const PostModal = ({
   setSelect,
@@ -61,7 +62,7 @@ const PostModal = ({
   const [windowWidth, windowHeight] = useWindowSize();
   const [error, setError] = useState(false);
   const commentsRef = useRef<HTMLDivElement>(null);
-
+  const scrollRef = useRef<HTMLDivElement>(null); 
   const executeScroll = () => {
     commentsRef.current.scrollIntoView({
       behavior: "smooth",
@@ -606,17 +607,17 @@ const PostModal = ({
                 />
               </div>
               {/* Content container */}
-              <div
-                className="flex flex-col w-full overflow-y-auto border-t border-transparent rounded-lg mt-14 dark:border-darkBorder md:pt-0 scrollbar-thin scrollbar-thumb-lightScroll scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full dark:scrollbar-thumb-darkScroll"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div ref={scrollRef} onClick={() => handleBack()} className="flex flex-col w-full h-screen overflow-y-auto bg-green-400 border-t border-transparent rounded-lg mt-14 dark:border-darkBorder md:pt-0 scrollbar-thin scrollbar-thumb-lightScroll scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full dark:scrollbar-thumb-darkScroll">
                 {/* LOADING POST CARD */}
                 {loadingPost ? (
                   // Loading Media Card
                   <>{postPlaceHolder}</>
                 ) : (
                   // Loaded Media Card
-                  <div className="w-full mb-3 bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG">
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full mb-3 bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG"
+                  >
                     {/* Flex container */}
                     <div className="flex flex-row items-center p-3 md:pl-0 md:pt-4 md:pr-4 md:pb-4">
                       {/* Upvote column */}
@@ -922,6 +923,7 @@ const PostModal = ({
                       (openReply ? "block " : "hidden ") +
                       "bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG p-2 mb-3"
                     }
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <CommentReply
                       parent={apost?.name}
@@ -931,7 +933,10 @@ const PostModal = ({
                 )}
 
                 {apost?.archived && (
-                  <div className="flex-grow w-full">
+                  <div
+                    className="flex-grow w-full"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <div className="flex items-center gap-4 p-2 px-4 mb-3 bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG">
                       <BsArchive />
                       <p className="flex flex-col text-sm font-normal ">
@@ -946,8 +951,9 @@ const PostModal = ({
 
                 {/* comments */}
                 <div
+                  onClick={(e) => e.stopPropagation()}
                   className={
-                    "flex-grow bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG"
+                    " bg-white border rounded-lg border-lightBorder dark:border-darkBorder dark:bg-darkBG"
                   }
                 >
                   <div
@@ -1012,13 +1018,20 @@ const PostModal = ({
                           </div>
                         </div>
                       )}
-                      <div className={"flex-grow  w-full px-2 "}>
+                      <div className={"w-full px-2 relative"}>
                         <Comments comments={myReplies} depth={0} />
-                        <Comments
+                        {/* <Comments
                           comments={post_comments}
                           depth={0}
                           op={apost?.author}
                           portraitMode={usePortrait}
+                        /> */}
+                        <CommentsVirtual
+                        scrollRef={scrollRef}
+                        comments={post_comments}
+                        depth={0}
+                        op={apost?.author}
+                        portraitMode={usePortrait}
                         />
                       </div>
                     </div>

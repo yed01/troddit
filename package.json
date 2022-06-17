@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/react": "^1.5",
     "@react-hook/window-size": "^3.0.7",
+    "@tanstack/react-virtual": "^3.0.0-beta.2",
+    "@tanstack/virtual-core": "^3.0.0-alpha.1",
     "axios": "^0.26.1",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",

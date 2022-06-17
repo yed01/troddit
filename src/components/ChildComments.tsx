@@ -20,6 +20,7 @@ const ChildComments = ({
   hide,
   op = "",
   portraitMode = false,
+  afterHeightChange = () => {},
 }) => {
   const [moreComments, setMoreComments] = useState([]);
   const [moreLoaded, setMoreLoaded] = useState(false);
@@ -66,6 +67,10 @@ const ChildComments = ({
       setchildcomments(myReplies);
     }
   }, [myReplies]);
+
+  useEffect(() => {
+    afterHeightChange(); 
+  }, [hideChildren])
 
   const fixformat = useCallback(async (comments) => {
     if (comments?.length > 0) {
