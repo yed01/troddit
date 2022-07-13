@@ -31,7 +31,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
-ARG portnum=3000
+ARG portnum=3100
 EXPOSE ${portnum}
 
 ENV PORT ${portnum}
